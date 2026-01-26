@@ -20,7 +20,7 @@ import {
   getCognitoLogoutUrl,
 } from "./oauth-helpers";
 import { sessionStorage } from "./sessionStorage";
-import type { User } from "../types";
+import type { OAuthUser } from "../types";
 
 const COGNITO_DOMAIN = import.meta.env.VITE_COGNITO_DOMAIN;
 const COGNITO_CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID;
@@ -50,7 +50,7 @@ export async function startLogin(): Promise<void> {
 export async function handleOAuthCallback(
   code: string,
   state: string,
-): Promise<User> {
+): Promise<OAuthUser> {
   const storedState = sessionStorage.getState();
   const codeVerifier = sessionStorage.getCodeVerifier();
 
@@ -112,7 +112,7 @@ export async function doLogout(): Promise<void> {
   window.location.href = getCognitoLogoutUrl(COGNITO_DOMAIN, COGNITO_CLIENT_ID);
 }
 
-export function getUserFromStoredToken(): User | null {
+export function getUserFromStoredToken(): OAuthUser | null {
   const idToken = sessionStorage.getIdToken();
   if (!idToken) return null;
   return decodeIdToken(idToken);
