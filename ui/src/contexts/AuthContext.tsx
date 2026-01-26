@@ -30,9 +30,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = getUserFromStoredToken();
-    if (user) {
-      setUser(user);
+    const storedUser = getUserFromStoredToken();
+    if (storedUser) {
+      setUser(storedUser);
     }
     setLoading(false);
   }, []);
