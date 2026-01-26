@@ -4,7 +4,7 @@ export function getCognitoLoginUrl(
   state: string,
   codeChallenge: string,
   domain: string,
-  client_id: string
+  client_id: string,
 ): string {
   const authUrl = new URL(`${domain}/oauth2/authorize`);
   authUrl.searchParams.set("client_id", client_id);
@@ -12,7 +12,7 @@ export function getCognitoLoginUrl(
   authUrl.searchParams.set("scope", "openid email");
   authUrl.searchParams.set(
     "redirect_uri",
-    `${window.location.origin}/callback`
+    `${window.location.origin}/callback`,
   );
   authUrl.searchParams.set("state", state);
   authUrl.searchParams.set("code_challenge", codeChallenge);
@@ -22,7 +22,7 @@ export function getCognitoLoginUrl(
 
 export function getCognitoLogoutUrl(domain: string, client_id: string) {
   return `${domain}/logout?client_id=${client_id}&logout_uri=${encodeURIComponent(
-    window.location.origin
+    window.location.origin,
   )}`;
 }
 
@@ -59,7 +59,7 @@ export function generateState(): string {
   const array = new Uint8Array(16);
   crypto.getRandomValues(array);
   return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
-    ""
+    "",
   );
 }
 
@@ -70,9 +70,8 @@ export function decodeIdToken(idToken: string): User | null {
     return {
       sub: decoded.sub,
       email: decoded.email,
-      name: decoded.name || decoded.preferred_username || decoded.username,
-      groups: decoded["cognito:groups"] || [],
       email_verified: decoded.email_verified,
+      groups: decoded["cognito:groups"] || [],
     };
   } catch {
     return null;
